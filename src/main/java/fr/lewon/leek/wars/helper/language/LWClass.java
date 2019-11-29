@@ -14,7 +14,7 @@ public class LWClass extends LWElement {
         super(name);
         AtomicInteger cpt = new AtomicInteger();
         this.fields = fields.stream()
-                .map(f -> new LWField(this, f.getName(), cpt.getAndIncrement()))
+                .map(f -> new LWField(this, f.getName(), cpt.incrementAndGet()))
                 .collect(Collectors.toList());
     }
 

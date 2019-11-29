@@ -9,16 +9,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ObjectGenerators {
+public class LSObjectGenerators {
 
     public String generateObjectFileContent(Class<?>... objClasses) {
         return Arrays.stream(objClasses)
-                .map(c -> new LWClass(c.getName(), this.getAllAnnotatedFields(c)))
+                .map(c -> new LWClass(c.getSimpleName(), this.getAllAnnotatedFields(c)))
                 .map(LWClass::generateLeekScript)
                 .collect(Collectors.joining("\n\n//-----------------\n\n"));
     }
 
-    private List<Field> getAllAnnotatedFields(Class<?> refClass) {
+    protected List<Field> getAllAnnotatedFields(Class<?> refClass) {
         List<Field> fields = new ArrayList<>();
         while (refClass != null) {
             fields.addAll(this.getAnnotatedFields(refClass));
@@ -27,7 +27,7 @@ public class ObjectGenerators {
         return fields;
     }
 
-    private List<Field> getAnnotatedFields(Class<?> refClass) {
+    protected List<Field> getAnnotatedFields(Class<?> refClass) {
         return Arrays.stream(refClass.getDeclaredFields())
                 .filter(f -> f.isAnnotationPresent(LWFieldExport.class))
                 .collect(Collectors.toList());
